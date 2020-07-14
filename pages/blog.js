@@ -1,15 +1,16 @@
 // posts will be populated at build time by getStaticProps()
-import fetch from 'isomorphic-unfetch'
+import fetch from "isomorphic-unfetch";
 function Blog({ posts }) {
   return (
     <ul>
       {posts.map((post, index) => (
-        <li key={index}>{post.name}
-            <p>{post.title}</p>
+        <li key={index}>
+          {post.name}
+          <p>{post.title}</p>
         </li>
       ))}
     </ul>
-  )
+  );
 }
 
 // This function gets called at build time on server-side.
@@ -18,8 +19,8 @@ function Blog({ posts }) {
 export async function getStaticProps() {
   // Call an external API endpoint to get posts.
   // You can use any data fetching library
-  const res = await fetch('https://jsonplaceholder.typicode.com/users')
-  const posts = await res.json()
+  const res = await fetch("https://jsonplaceholder.typicode.com/users");
+  const posts = await res.json();
 
   // By returning { props: posts }, the Blog component
   // will receive `posts` as a prop at build time
@@ -27,7 +28,7 @@ export async function getStaticProps() {
     props: {
       posts,
     },
-  }
+  };
 }
 
-export default Blog
+export default Blog;

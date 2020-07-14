@@ -1,20 +1,31 @@
-import Head from 'next/head'
-import Layout, { siteTitle } from '../components/layout'
-import utilStyles from '../styles/utils.module.css'
-import Link from 'next/link'
+import App from "../components/App";
 
-export default function Home() {
-  return (
-    <Layout home>
-      <Head>…</Head>
-      <section className={utilStyles.headingMd}>…</section>
-      <section className={`${utilStyles.headingMd} ${utilStyles.padding1px}`}>
-        <h2 className={utilStyles.headingLg}>Blog</h2>
-        <Link href="/blog">
-          <a>Users</a>
-        </Link>
-      </section>
-    </Layout>
-  )
+import PostList, {
+  ALL_POSTS_QUERY,
+  allPostsQueryVars,
+} from "../components/PostList";
+import { initializeApollo } from "../lib/apolloClient";
+
+const IndexPage = () => (
+  <App>
+    <PostList />
+  </App>
+);
+
+export async function getStaticProps() {
+  const apolloClient = initializeApollo();
+
+  await apolloClient.query({
+    query: ALL_POSTS_QUERY,
+    variables: allPostsQueryVars,
+  });
+
+  return {
+    props: {
+      initialApolloState: apolloClient.cache.extract(),
+    },
+    unstable_revalidate: 1,
+  };
 }
 
+export default IndexPage;
